@@ -1,18 +1,14 @@
 from selenium import webdriver
 import time
-import operator as op
+import sys
 
-# from functools import reduce
-#
-# def ncr(n, r):
-#     r = min(r, n-r)
-#     numer = reduce(op.mul, range(n, n-r, -1), 1)
-#     denom = reduce(op.mul, range(1, r+1), 1)
-#     return numer / denom
+player_one = input("Enter player 1's name (Ex: 'Rafael Nadal') here: ")
+player_two = input("Enter player 2's name (Ex: 'Novak Djokovic') here: ")
 
-
-player_one = input("Enter player 1's name here: ")
-player_two = input("Enter player 2's name here: ")
+if player_two == player_one:
+    sys.exit("Please enter two different players")
+if player_one == "" or player_two == "":
+    sys.exit("Please fill in the players' names")
 
 url = "https://www.atptour.com/en/players/atp-head-2-head/" \
       "roger-federer-vs-andreas-seppi/F324/SA93"
@@ -41,6 +37,10 @@ for character in player_two:
 
 # getting their ATP code, ie: Rafael Nadal: N406
 results = driver.find_elements_by_class_name("head-to-head-search-result")
+
+if len(results) != 2:
+    sys.exit("Please spell the players' names correctly")
+
 player_one_id = results[0].get_attribute("data-value")
 player_two_id = results[1].get_attribute("data-value")
 
@@ -63,8 +63,8 @@ previous_matches = driver.find_elements_by_css_selector(
 
 links = []
 stats = []
-p1_probability = 0
-p2_probability = 0
+p1_percentage = 0
+p2_percentage = 0
 matches = 0
 
 # creating a list of all the links that store previous match data
@@ -82,17 +82,17 @@ for link in links:
     winner = driver.find_element_by_class_name("first-name").text
     if p1_first.lower() == winner.lower():
         p1_temp = int(stats[-1])
-        p1_probability += p1_temp
+        p1_percentage += p1_temp
     else:
         p1_temp = 100 - int(stats[-1])
-        p1_probability += p1_temp
+        p1_percentage += p1_temp
     matches += 1
     p2_temp = 100 - p1_temp
-    print("match #{}: {}'s point probability: {}, {}'s point probability: {}" \
+    print("match #{}: {}'s point percentage: {}, {}'s point percentage: {}" \
           .format(matches, player_one, p1_temp, player_two, p2_temp))
     print()
 
-p1 = p1_probability / matches  # Point probability of p1
-print("{}'s point probability is {}".format(player_one, p1))
-p2 = 100 - p1  # Point probability of p2
-print("{}'s point probability is {}".format(player_two, p2))
+p1 = p1_percentage / matches  # Point percentage of p1
+print("{}'s point percentage is {}".format(player_one, p1))
+p2 = 100 - p1  # Point perentage of p2
+print("{}'s point percentage is {}".format(player_two, p2))
