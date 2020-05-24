@@ -86,5 +86,4 @@ print("{}'s point probability is {}".format(player_one, p1))
 p2 = 100 - p1  # Point probability of p2
 print("{}'s point probability is {}".format(player_two, p2))
 
-# Finding thee probability that they will win the match given their point
-# probability
+
