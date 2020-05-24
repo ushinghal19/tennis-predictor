@@ -23,8 +23,14 @@ driver = webdriver.Chrome(
 driver.get(url)
 
 submit_boxes = driver.find_elements_by_class_name("head-to-head-search-input")
+
+# submit box for player 1 on the ATP website
 submit_box_one = submit_boxes[0]
+
+# submit box for player 2 on the ATP website
 submit_box_two = submit_boxes[1]
+
+# typing the players' names in the search boxes
 for character in player_one:
     submit_box_one.send_keys(character)
     time.sleep(0.3)
@@ -33,10 +39,12 @@ for character in player_two:
     submit_box_two.send_keys(character)
     time.sleep(0.3)
 
+# getting their ATP code, ie: Rafael Nadal: N406
 results = driver.find_elements_by_class_name("head-to-head-search-result")
 player_one_id = results[0].get_attribute("data-value")
 player_two_id = results[1].get_attribute("data-value")
 
+# breaking the players' names into first name and last name
 p1_parsed = player_one.split(" ")
 p1_first = p1_parsed[0]
 p1_second = p1_parsed[1]
@@ -45,6 +53,7 @@ p2_parsed = player_two.split(" ")
 p2_first = p2_parsed[0]
 p2_second = p2_parsed[1]
 
+# visiting the website where their head-to-head stats are
 driver.get("https://www.atptour.com/en/players/atp-head-2-head/"
            "{}-{}-vs-{}-{}/{}/{}".format(p1_first, p1_second, p2_first,
                                          p2_second, player_one_id,
@@ -58,10 +67,12 @@ p1_probability = 0
 p2_probability = 0
 matches = 0
 
+# creating a list of all the links that store previous match data
 for match in previous_matches:
     link = match.get_attribute('href')
     links.append(link)
 
+# running through links and seeing their points won percentage in each match
 for link in links:
     driver.get(link)
     elements = driver.find_elements_by_class_name("match-stats-number-left")
@@ -85,5 +96,3 @@ p1 = p1_probability / matches  # Point probability of p1
 print("{}'s point probability is {}".format(player_one, p1))
 p2 = 100 - p1  # Point probability of p2
 print("{}'s point probability is {}".format(player_two, p2))
-
-
