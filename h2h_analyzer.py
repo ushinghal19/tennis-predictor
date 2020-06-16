@@ -94,5 +94,5 @@ for link in links:
 
 p1 = p1_percentage / matches  # Point percentage of p1
 print("{}'s point percentage is {}".format(player_one, p1))
-p2 = 100 - p1  # Point perentage of p2
+p2 = 100 - p1  # Point percentage of p2
 print("{}'s point percentage is {}".format(player_two, p2))
